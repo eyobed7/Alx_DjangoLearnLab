@@ -9,9 +9,9 @@ books_by_author = Book.objects.filter(author=author)
 # Print the titles of the books
 for book in books_by_author:
     print(book.title)
+author = Author.objects.create(name="J.K. Rowling")
+book = Book.objects.create(title="Harry Potter", author=author)
 
-
-# Assume you have a Library object
 library = Library.objects.get(name="Central Library")
 
 # Get all books in this library
