@@ -42,6 +42,16 @@ def retrieve_librarian_for_library(library_name):
     except Librarian.DoesNotExist:
         print(f"No librarian assigned to {library_name}.")
 
+# Function to retrieve the librarian for a library using the library's field in Librarian
+def retrieve_librarian_by_library(library_name):
+    try:
+        librarian = Librarian.objects.get(library__name=library_name)
+        print(f"Librarian for {library_name}: {librarian.name}")
+    except Librarian.DoesNotExist:
+        print(f"No librarian assigned to {library_name}.")
+    except Library.DoesNotExist:
+        print(f"Library {library_name} does not exist.")
+
 if __name__ == "__main__":
     # Example usage
     author_name = "J.K. Rowling"
@@ -53,8 +63,12 @@ if __name__ == "__main__":
     print("\nListing Books in Library:")
     list_books_in_library(library_name)
     
-    print("\nRetrieving Librarian for Library:")
+    print("\nRetrieving Librarian for Library (via Library object):")
     retrieve_librarian_for_library(library_name)
+    
+    print("\nRetrieving Librarian by Library field:")
+    retrieve_librarian_by_library(library_name)
+
 
 
 '''from models import Author,Book,Librarian,Library
