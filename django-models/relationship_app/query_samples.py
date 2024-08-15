@@ -1,5 +1,14 @@
 from models import Author,Book,Librarian,Library
 
+library = Library.objects.get(name="Central Library")
+
+# Get all books in this library
+books_in_library = library.books.all()
+
+# Print the titles of the books
+for book in books_in_library:
+    print(book.title)
+
 # Assume you have an Author object
 author = Author.objects.get(name="J.K. Rowling")
 
@@ -9,19 +18,11 @@ books_by_author = Book.objects.filter(author=author)
 # Print the titles of the books
 for book in books_by_author:
     print(book.title)
-author = Author.objects.create(name="J.K. Rowling")
+
+
 book = Book.objects.create(title="Harry Potter", author=author)
 
-library = Library.objects.get(name="Central Library")
 
-# Get all books in this library
-books_in_library = library.books.all()
-
-# Print the titles of the books
-for book in books_in_library:
-    print(book.title)
-# Assume you have a Library object
-library = Library.objects.get(name="Central Library")
 
 # Retrieve the librarian for this library
 librarian = library.librarian
