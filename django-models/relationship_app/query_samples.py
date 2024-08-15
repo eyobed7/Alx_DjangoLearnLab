@@ -45,7 +45,7 @@ def retrieve_librarian_for_library(library_name):
 # Function to retrieve the librarian for a library using the library's field in Librarian
 def retrieve_librarian_by_library(library_name):
     try:
-        librarian = Librarian.objects.get(library__name=library_name)
+        librarian = Librarian.objects.get(library="")
         print(f"Librarian for {library_name}: {librarian.name}")
     except Librarian.DoesNotExist:
         print(f"No librarian assigned to {library_name}.")
