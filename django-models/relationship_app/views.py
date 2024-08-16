@@ -1,6 +1,31 @@
 from django.views.generic.detail import DetailView
-from django.shortcuts import render
 from .models import Library,Book
+from django.shortcuts import render, redirect
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.forms import UserCreationForm
+
+# Create your views here.
+def register(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("login")
+    else:
+        form = UserCreationForm()
+
+    return render(request, "relationship_app/register.html", {"form": form})
+
+class CustomLoginView(LoginView):
+    template_name = "relationship_app/login.html"
+
+def product(request):
+    return render(request, "relationship_app/product.html")
+
+def index(request):
+    return render(request, "relationship_app/index.html")
+def product(request):
+    return render(request, "product.html")
 
 def list_books(request):
       """Retrieves all books and renders a template displaying the list."""
