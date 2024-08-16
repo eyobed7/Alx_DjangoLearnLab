@@ -6,13 +6,13 @@ def book_list(request):
       """Retrieves all books and renders a template displaying the list."""
       boo = Book.objects.all()  # Fetch all book instances from the database
       context = {'books': boo}  # Create a context dictionary with book list
-      return render(request,'list_books.html', context)
+      return render(request,'relationship_app/list_books.html', context)
 # Create your views here.
 
 class bookListView(DetailView):
     model = Library
-    template_name = 'library_detail.html'
+    template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
 
 def index(request):
-    return render(request, "index.html")
+    return render(request, "relationship_app/index.html")
