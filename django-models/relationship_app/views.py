@@ -1,8 +1,10 @@
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.detail import DetailView
 from .models import Library,Book
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import LoginView
-from django.contrib.auth.forms import UserCreationForm
+
 
 # Create your views here.
 def register(request):
@@ -16,7 +18,7 @@ def register(request):
 
     return render(request, "relationship_app/register.html", {"form": form})
 
-class CustomLoginView(LoginView):
+class CustomLoginView(login):
     template_name = "relationship_app/login.html"
 
 def product(request):
