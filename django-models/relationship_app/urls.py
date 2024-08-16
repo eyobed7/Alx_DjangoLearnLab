@@ -4,12 +4,13 @@ from django.contrib.auth.views import LogoutView
 
 urlspattern=[
     path("", index, name="index"),
+    path("login/", CustomLoginView.as_view('login.html'), name="login"),
+    path("logout/", LogoutView.as_view('logout.html'), name="logout"),
     path("booklist/",list_books , name="booklist"),
     path("listlibrary/", LibraryDetailView.as_view(), name="listlibrary"),
-    path("register/", register, name="register"),
-    path("login/", CustomLoginView.as_view(next_page="product"), name="login"),
+    path("register/", register, name="register"),  
     path("product/", product, name="product"),
-    path("logout/", LogoutView.as_view(next_page="index"), name="logout"),
+    
 
 ]
 from django.urls import path
