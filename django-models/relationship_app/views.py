@@ -18,8 +18,11 @@ def register(request):
 
     return render(request, "relationship_app/register.html", {"form": form})
 
-class CustomLoginView(login):
+class LoginView(login):
     template_name = "relationship_app/login.html"
+
+class LogoutView(login):
+    template_name = "relationship_app/logout.html"
 
 def product(request):
     return render(request, "relationship_app/product.html")

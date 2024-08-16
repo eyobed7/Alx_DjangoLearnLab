@@ -1,6 +1,8 @@
 from .views import list_books,LibraryDetailView,index,CustomLoginView, product
 from django.urls import path
 from django.contrib.auth.views import LogoutView
+from django.urls import path
+from .views import index, register, LoginView, product
 
 urlspattern=[
     path("", index, name="index"),
@@ -11,10 +13,8 @@ urlspattern=[
     path("register/", register, name="register"),  
     path("product/", product, name="product"),
     
-
 ]
-from django.urls import path
-from .views import index, register, CustomLoginView, product
+
 
 
 
