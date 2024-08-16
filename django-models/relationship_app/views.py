@@ -3,8 +3,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.detail import DetailView
 from .models import Library,Book
 from django.shortcuts import render, redirect
-from django.contrib.auth.views import LoginView
-
 
 # Create your views here.
 def register(request):
@@ -18,19 +16,7 @@ def register(request):
 
     return render(request, "relationship_app/register.html", {"form": form})
 
-class LoginView(login):
-    template_name = "relationship_app/login.html"
 
-class LogoutView(login):
-    template_name = "relationship_app/logout.html"
-
-def product(request):
-    return render(request, "relationship_app/product.html")
-
-def index(request):
-    return render(request, "relationship_app/index.html")
-def product(request):
-    return render(request, "product.html")
 
 def list_books(request):
       """Retrieves all books and renders a template displaying the list."""
