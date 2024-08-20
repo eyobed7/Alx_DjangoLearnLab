@@ -1,21 +1,16 @@
-from .models import Author,Book,Librarian,Library
+from relationship_app.models import Author, Book, Library, Librarian
 
-# Assuming you have an author instance
-author = Author.objects.get(id=1)  # Replace `author_id` with the actual ID
-# Query all books by this author
-books_by_author = Book.objects.filter(author=author)
+def query_all_books_by_author(author_name):
+    """Query all books by a specific author."""
+    author = Author.objects.get(name=author_name)
+    return Book.objects.filter(author=author)
 
+def list_all_books_in_library(library_name):
+    """List all books in a library."""
+    library = Library.objects.get(name=library_name)
+    return library.books.all()
 
-# Alternatively, if you have the author's name:
-books_by_author = Book.objects.filter(author__name="Author Name")
-# Assuming you have a library instance
-library = Library.objects.get(id=1)  # Replace `library_id` with the actual ID
-
-# List all books in this library
-books_in_library = library.books.all()
-
-# Assuming you have a library instance
-library = Library.objects.get(id=1)  # Replace `library_id` with the actual ID
-
-# Retrieve the librarian for this library
-librarian = library.library
+def retrieve_librarian_for_library(library_name):
+    """Retrieve the librarian for a library."""
+    library = Library.objects.get(name=library_name)
+    return library.librarian
