@@ -12,5 +12,4 @@ def list_all_books_in_library(library_name):
 
 def retrieve_librarian_for_library(library_name):
     # The query the evaluation script is looking for
-    librarian = Librarian.objects.get(library__name=library_name)
-    return librarian
+    return Librarian.objects.get(Library=library_name)
