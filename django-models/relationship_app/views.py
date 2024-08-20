@@ -5,11 +5,11 @@ from .models import Library,Book
 
 def list_books(request):
     books = Book.objects.select_related('author').all()  # Prefetch author data to optimize query
-    return render(request, 'relationship_app/book_list.html', {'books': books})
+    return render(request, 'book_list.html', {'books': books})
 
 
 class LibraryDetailView(DetailView):
     model = Library
-    template_name = 'relationship_app/library_detail.html'
+    template_name = 'library_detail.html'
     context_object_name = 'library'
 
