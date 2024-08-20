@@ -3,9 +3,11 @@ from django.views.generic import DetailView
 from .models import Library,Book
 
 
+
 def list_books(request):
-    books = Book.objects.select_related('author').all()  # Prefetch author data to optimize query
+    books = Book.objects.all()  # Query all books from the database
     return render(request, 'relationship_app/list_books.html', {'books': books})
+
 
 
 class LibraryDetailView(DetailView):
