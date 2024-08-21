@@ -3,8 +3,9 @@ from .models import Library,Book
 from django.views.generic.detail import DetailView
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 
 def register(request):
     if request.method == 'POST':
@@ -17,14 +18,22 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
 
-
 # Login view
-class CustomLoginView(LoginView):
-    template_name = 'relationship_app/login.html'
+def user_login(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'relationship_app/login.html', {'form': form})
 
 # Logout view
-class CustomLogoutView(LogoutView):
-    template_name = 'relationship_app/logout.html'
+def user_logout(request):
+    logout(request)
+    return redirect('login')
 
 
 def is_admin(user):
