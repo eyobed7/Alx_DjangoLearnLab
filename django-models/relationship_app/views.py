@@ -1,4 +1,5 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import permission_required
 from .models import Library,Book
 from django.views.generic.detail import DetailView
 from django.contrib.auth.decorators import user_passes_test
@@ -7,6 +8,42 @@ from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 
+@permission_required('relationship_app.can_add_book')
+def add_book(request):
+    if request.method == "POST":
+        title = request.POST.get('title')
+        author_id = request.POST.get('author')  # Assume author is selected by ID
+        publication_year = request.POST.get('publication_year')
+
+        if title and author_id:
+            Book.objects.create(
+                title=title,
+                author_id=author_id,
+                publication_year=publication_year
+            )
+            return redirect('book_list')
+    return render(request, 'relationship_app/add_book.html')
+
+@permission_required('relationship_app.can_change_book')
+def edit_book(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+
+    if request.method == "POST":
+        book.title = request.POST.get('title', book.title)
+        book.author_id = request.POST.get('author', book.author_id)
+        book.publication_year = request.POST.get('publication_year', book.publication_year)
+        book.save()
+        return redirect('book_detail', pk=book.pk)
+
+    return render(request, 'relationship_app/edit_book.html', {'book': book})
+
+@permission_required('relationship_app.can_delete_book')
+def delete_book(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    if request.method == "POST":
+        book.delete()
+        return redirect('book_list')
+    return render(request, 'relationship_app/delete_book.html', {'book': book})
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
