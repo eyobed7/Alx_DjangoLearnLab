@@ -19,7 +19,7 @@ def register(request):
     return render(request, 'relationship_app/register.html', {'form': form})
 
 # Login view
-def user_login(request):
+''''def user_login(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -33,7 +33,7 @@ def user_login(request):
 # Logout view
 def user_logout(request):
     logout(request)
-    return redirect('login')
+    return redirect('login')'''
 
 
 def is_admin(user):
