@@ -1,8 +1,30 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .models import Library,Book
 from django.views.generic.detail import DetailView
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import LoginView, LogoutView
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            return redirect('my_login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'relationship_app/register.html', {'form': form})
+
+
+# Login view
+class CustomLoginView(LoginView):
+    template_name = 'relationship_app/login.html'
+
+# Logout view
+class CustomLogoutView(LogoutView):
+    template_name = 'relationship_app/logout.html'
 
 
 def is_admin(user):
