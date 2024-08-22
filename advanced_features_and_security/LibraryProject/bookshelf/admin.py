@@ -16,7 +16,7 @@ class BookAdmin(admin.ModelAdmin):
     # Add filters based on these fields
     list_filter = ('author', 'publication_year')
 
-# Register the Book model with the custom admin configuration
+admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Book, BookAdmin)
-admin.site.register(CustomUser,CustomUserAdmin)
+
 # Register your models here.
