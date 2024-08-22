@@ -1,5 +1,10 @@
 from django.contrib import admin
-from .models import Book
+from .models import Book,CustomUser
+from django.contrib.auth.admin import UserAdmin
+
+class ModelAdmin(UserAdmin):
+    pass
+
 
 class BookAdmin(admin.ModelAdmin):
     # Display these fields in the admin list view
@@ -13,4 +18,5 @@ class BookAdmin(admin.ModelAdmin):
 
 # Register the Book model with the custom admin configuration
 admin.site.register(Book, BookAdmin)
+admin.site.register(CustomUser,ModelAdmin)
 # Register your models here.
