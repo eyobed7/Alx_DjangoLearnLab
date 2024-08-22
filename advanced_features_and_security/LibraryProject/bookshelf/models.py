@@ -3,11 +3,11 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import FileExtensionValidator
 from typing import Any
 from django.db import models
-from django.contrib.auth.models import AbstractUser,UserManager,PermissionsMixin
+from django.contrib.auth.models import AbstractUser,BaseUserManager,PermissionsMixin
 from django.utils import timezone
 from django.core.validators import FileExtensionValidator
 
-class CustomUserManger(UserManager):
+class CustomUserManager(BaseUserManager):
     def _create_user(self,email,password,**extra_fields):
         if not email:
             raise ValueError("please insert your email")
