@@ -1,4 +1,4 @@
->>> from bookshelf.models import Book
+'''>>> from bookshelf.models import Book
 >>> book = Book(title="strt with why",author="simion",publication_year=2020)
 >>> book.save()
 
@@ -30,3 +30,5 @@ strt with why simion 2020
 >>> book= Book.objects.get(id=1)
 >>> book.delete()
 (1, {'bookshelf.Book': 1})
+
+'''

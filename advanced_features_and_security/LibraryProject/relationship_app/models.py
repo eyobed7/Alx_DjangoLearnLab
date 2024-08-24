@@ -3,10 +3,10 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import FileExtensionValidator
 
 
-class customUser(AbstractUser):
+'''class customUser(AbstractUser):
     date_of_birth=models.DateField(null=True, blank=True) 
     profile_photo= models.ImageField(upload_to='profile_pictures/', null=True, blank=True, validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])])
-
+'''
            
 class Author(models.Model):
     name = models.CharField(max_length=15)
