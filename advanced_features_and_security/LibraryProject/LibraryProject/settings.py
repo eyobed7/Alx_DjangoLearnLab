@@ -18,10 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECURE_SSL_REDIRECT = True  # Redirect HTTP to HTTPS
 SESSION_COOKIE_SECURE = True  # Use secure cookies
 CSRF_COOKIE_SECURE = True  # Use secure CSRF cookies
-
-
-
-
+SECURE_BROWSER_XSS_FILTER=True
 SECURE_HSTS_SECONDS = 31536000  # 1 year
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
@@ -61,7 +58,31 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django_csp.middleware.CSPMiddleware',
 ]
+
+CSP_POLICY = {
+    # Default policy
+    'default-src': ["'self'"],
+
+    # Allow scripts from trusted sources
+    'script-src': ["'self'", 'trusted-script-source.com'],
+
+    # Allow styles from trusted sources
+    'style-src': ["'self'", 'trusted-style-source.com'],
+
+    # Allow images from trusted sources
+    'img-src': ["'self'", 'trusted-image-source.com'],
+
+    # Allow fonts from trusted sources
+    'font-src': ["'self'", 'trusted-font-source.com'],
+
+    # Allow connections to trusted sources
+    'connect-src': ["'self'", 'trusted-api-source.com'],
+
+    # Other directives can be added as needed
+}
+
 
 ROOT_URLCONF = 'LibraryProject.urls'
 
