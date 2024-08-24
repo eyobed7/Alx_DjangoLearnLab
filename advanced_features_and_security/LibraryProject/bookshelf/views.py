@@ -7,6 +7,6 @@ def homepage(request):
     return render(request,'bookshelf/homepage.html')
 
 @permission_required('bookshelf.can_edit', raise_exception=True)
-def dashboard(request):
+def book_list(request):
     return render(request,'bookshelf/dashboard.html')
 
