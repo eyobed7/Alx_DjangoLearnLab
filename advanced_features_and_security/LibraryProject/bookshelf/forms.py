@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from .models import CustomUser, Post
 
-class CustomUserCreationForm(UserCreationForm):
+class ExampleForm(UserCreationForm):
     ROLES = [
         ("creator", "Creator"),
         ("reader", "Reader"),

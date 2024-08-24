@@ -2,11 +2,11 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Group
-from .forms import CustomUserCreationForm
+from .forms import ExampleForm
 
 def register(request):
     if request.method == "POST":
-        form = CustomUserCreationForm(request.POST)
+        form = ExampleForm(request.POST)
         if form.is_valid():
             user = form.save()
             role = form.cleaned_data.get("role")
@@ -19,7 +19,7 @@ def register(request):
         
             return redirect("homepage")
     else:
-        form = CustomUserCreationForm()
+        form = ExampleForm()
     return render(request, "bookshelf/Example.html", {"form": form})
         
 def homepage(request):
