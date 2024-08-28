@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5g5%(!)cf-+%8ib&c3wjp%^2-vq3*4o=9uzqvm3fcxlsh2h=dh'
+SECRET_KEY = 'django-insecure-xsfx-b61at)o6r_b=53t_^s33l8(zxlx0pb869v(3zr$m*%n25'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,8 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'api.apps.ApiConfig',
-    
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -79,7 +78,7 @@ WSGI_APPLICATION = 'api_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'eyu',
+        'NAME': 'new_book',
         'USER': 'root',
         'PASSWORD': 'EYOBED@123',
         'HOST': 'localhost',
