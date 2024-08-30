@@ -1,7 +1,8 @@
-from django.urls import path
-from .views import BookListAPIView
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import CohortViewSet  # Ensure this import is correct
 
-urlpatterns = [
+router = DefaultRouter()
+router.register(r'cohort', CohortViewSet, basename='cohort')
 
-    path("books", BookListAPIView.as_view(), name="book_list"),
-]
+urlpatterns = router.urls
