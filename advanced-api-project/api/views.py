@@ -3,13 +3,7 @@ from .models import Book,Author
 from .seriealizers import AuthorSerializer,BookSerializer
 from rest_framework import permissions
 
-class IsAdminOrReadOnly(permissions.BasePermission):
-    def has_permission(self, request, view):
-        # Only allow non-admins to perform safe methods (GET, HEAD, OPTIONS)
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        # Only allow admin users to create, update, or delete
-        return request.user and request.user.is_staff
+
 
 class BookList(generics.ListAPIView):
     queryset = Book.objects.all()
@@ -59,3 +53,11 @@ class BookListCreateAPIView(generics.ListCreateAPIView):
 class AuthorListCreateAPIView(generics.ListCreateAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer    
+
+'''class IsAdminOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        # Only allow non-admins to perform safe methods (GET, HEAD, OPTIONS)
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        # Only allow admin users to create, update, or delete
+        return request.user and request.user.is_staff '''
