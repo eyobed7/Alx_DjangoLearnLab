@@ -1,8 +1,9 @@
 from rest_framework import generics
 from .models import Book,Author
 from .seriealizers import AuthorSerializer,BookSerializer
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework import permissions
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
 
 class IsAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -16,7 +17,7 @@ class IsAdminOrReadOnly(permissions.BasePermission):
 class BookList(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]  # Only authenticated users can modify, anyone can view
+    permission_classes = [IsAuthenticated]  # Only authenticated users can modify, anyone can view
 
 # RetrieveAPIView: Handles retrieving a single book by ID (similar to DetailView)
 class BookDetail(generics.RetrieveAPIView):
