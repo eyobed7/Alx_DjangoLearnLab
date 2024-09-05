@@ -2,47 +2,45 @@ from rest_framework import generics
 from .models import Book,Author
 from .seriealizers import AuthorSerializer,BookSerializer
 from rest_framework import permissions
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
+class IsAdminOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        # Only allow non-admins to perform safe methods (GET, HEAD, OPTIONS)
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        # Only allow admin users to create, update, or delete
+        return request.user and request.user.is_staff
 
-
+# ListAPIView: Handles retrieving a list of books (similar to ListView)
 class BookList(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
-    
+    permission_classes = [IsAuthenticatedOrReadOnly]  # Only authenticated users can modify, anyone can view
+
+# RetrieveAPIView: Handles retrieving a single book by ID (similar to DetailView)
 class BookDetail(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
-     
+    permission_classes = [IsAuthenticatedOrReadOnly]  # Only authenticated users can modify, anyone can view
+
+# CreateAPIView: Handles creating a new book (similar to CreateView)
 class BookCreate(generics.CreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]  # Only authenticated users can create
 
-    def perform_create(self, serializer):
-        if serializer.validated_data['publication_year'] > 2024:
-            raise serializer.ValidationError("Publication year cannot be in the future.")
-        serializer.save(author=self.request.user)
-
+# UpdateAPIView: Handles updating an existing book (similar to UpdateView)
 class BookUpdate(generics.UpdateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]  # Only authenticated users can update
 
-    def perform_update(self, serializer):
-        # Ensure the user updating the book is the author
-        if serializer.instance.author != self.request.user:
-            raise serializer.ValidationError("You are not the author of this book.")
-        if serializer.validated_data['publication_year'] > 2024:
-            raise serializer.ValidationError("Publication year cannot be in the future.")
-        serializer.save()
-    
-
+# DestroyAPIView: Handles deleting a book (similar to DeleteView)
 class BookDelete(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]  # Only authenticated users can delete
 
 
 
@@ -54,10 +52,4 @@ class AuthorListCreateAPIView(generics.ListCreateAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer    
 
-'''class IsAdminOrReadOnly(permissions.BasePermission):
-    def has_permission(self, request, view):
-        # Only allow non-admins to perform safe methods (GET, HEAD, OPTIONS)
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        # Only allow admin users to create, update, or delete
-        return request.user and request.user.is_staff '''
+''' '''
