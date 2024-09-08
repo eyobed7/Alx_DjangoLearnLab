@@ -3,7 +3,7 @@ from .models import Book,Author
 from .seriealizers import AuthorSerializer,BookSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework import permissions
-
+from rest_framework import filters
 
 class IsAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -18,6 +18,9 @@ class BookList(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]  # Only authenticated users can modify, anyone can view
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title', 'publication_year']
+    ordering_fields = ['title', 'publication_year']
 
 # RetrieveAPIView: Handles retrieving a single book by ID (similar to DetailView)
 class BookDetail(generics.RetrieveAPIView):
