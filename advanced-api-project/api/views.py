@@ -1,11 +1,12 @@
 from rest_framework import generics
 from .models import Book,Author
+from django_filters.rest_framework import DjangoFilterBackend
 from .seriealizers import AuthorSerializer,BookSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework import permissions
 from rest_framework import filters
 from django_filters import rest_framework
-from rest_framework.filters import OrderingFilter,DjangoFilterBackend, SearchFilter
+from rest_framework.filters import OrderingFilter, SearchFilter
 
 class IsAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
