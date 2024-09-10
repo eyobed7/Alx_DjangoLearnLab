@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 from rest_framework import permissions
 from rest_framework import filters
 from django_filters import rest_framework
-from rest_framework.filters import OrderingFilter, SearchFilter
+
 
 class IsAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -21,7 +21,7 @@ class BookList(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]  # Only authenticated users can modify, anyone can view
-    filter_backends = (SearchFilter, OrderingFilter,DjangoFilterBackend, )
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
     search_fields = ['title', 'publication_year']
     ordering_fields = ['title', 'publication_year']
 
