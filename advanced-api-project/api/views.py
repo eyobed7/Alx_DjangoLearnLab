@@ -22,8 +22,8 @@ class BookList(generics.ListAPIView):
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]  # Only authenticated users can modify, anyone can view
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
-    search_fields = ['title', 'publication_year']
-    ordering_fields = ['title', 'publication_year']
+    search_fields = ['title', 'publication_year','author']
+    ordering_fields = ['title', 'publication_year','author']
 
 # RetrieveAPIView: Handles retrieving a single book by ID (similar to DetailView)
 class BookDetail(generics.RetrieveAPIView):
