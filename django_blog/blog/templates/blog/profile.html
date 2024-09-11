@@ -21,6 +21,15 @@
         </fieldset>
         <button type="submit">Update Profile</button>
         <p><a href="{% url 'logout' %}">Logout</a></p>
+        <p><a href="{% url 'postcreate' %}">create post</a></p>
+        <p><a href="{% url 'postlist' %}">list post</a></p>
+        {% for post in user.posts.all %}
+    <p>
+        <a href="{% url 'post-update' pk=post.pk %}">Edit Post</a> |
+        <a href="{% url 'post-delete' pk=post.pk %}">Delete Post</a>
+    </p>
+{% endfor %}
+
     </form>
 </body>
 </html>

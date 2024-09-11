@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect
+from django.urls import reverse,reverse_lazy
 from .forms import CreateUserForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -10,7 +11,56 @@ from .forms import CreateUserForm,LoginForm
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from .forms import UserUpdateForm, ProfileUpdateForm
+from django.views.generic import DetailView,ListView,CreateView,UpdateView,DeleteView
+from .models import Post
+from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 
+class PostListView(ListView):
+    model = Post
+    template_name = 'blog/postlist.html'  # Template name for listing posts
+    context_object_name = 'posts'
+
+
+class PostCreateView(LoginRequiredMixin,CreateView):
+    model = Post
+    fields = ['title', 'content']  # Fields to be included in the form
+    template_name = 'blog/postcreate.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user  # Set the author to the current user
+        return super().form_valid(form)
+    
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/post_detail.html'
+
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Post
+    fields = ['title', 'content']
+    template_name = 'blog/post_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author  # Only allow the author to edit the 
+    def get_success_url(self):
+        # Assuming you have a profile view with a URL named 'profile'
+        return reverse('postlist')  # Replace 'profile' with your actual URL name
+
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Post
+    template_name = 'blog/post_confirm_delete.html'
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author  # Only allow the author to delete the post
+    def get_success_url(self):
+        # Assuming you have a profile view with a URL named 'profile'
+        return reverse_lazy('postlist')  # Replace 'profile' with your actual URL name
+    
 def register(request):
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
