@@ -6,10 +6,10 @@ from django.contrib.auth.views import LoginView
 
 urlpatterns = [
     path('register/', register, name='register'),
-    path('postcreate/new/', PostCreateView.as_view(), name='postcreate'),
+    path('post/new/', PostCreateView.as_view(), name='postcreate'),
     path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
     path('postlist/', PostListView.as_view(), name='postlist'),
-    path('post/<int:pk>/', PostUpdateView.as_view(), name='post-update'),
+    path('post/<int:pk>/update/', PostUpdateView.as_view(), name='post-update'),
     path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post-delete'),
     path('login/',login,name='login'),
     path('logout/', logout_view, name='logout'),
