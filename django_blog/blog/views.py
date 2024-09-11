@@ -17,12 +17,12 @@ def register(request):
         if form.is_valid():
             user = form.save(commit=False)
             user.save()
-            return redirect('my_login')
+            return redirect('login')
     else:
         form = CreateUserForm()
     return render(request, 'blog/register.html', {'form': form})
 
-def my_login(request):
+def login(request):
     form=LoginForm()
     if request.method == 'POST':
         form=LoginForm(request,data=request.POST)
@@ -36,7 +36,7 @@ def my_login(request):
                 return redirect("profile")
             else:
                 messages.error(request, "Invalid credentials or account inactive")
-    return render(request,'blog/my_login.html',{'loginform':form})
+    return render(request,'blog/login.html',{'loginform':form})
 
 def logout_view(request):
     logout(request)
