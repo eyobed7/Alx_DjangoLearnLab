@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, UserProfile
+from .models import Post, UserProfile,Comment
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'published_date')
@@ -13,4 +13,5 @@ class UserProfileAdmin(admin.ModelAdmin):
 # Register your models with the admin site
 admin.site.register(Post, PostAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(Comment)
 

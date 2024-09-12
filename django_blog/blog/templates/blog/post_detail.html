@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    
+<head>    
     <meta charset="UTF-8">
     <title>Register</title>
     {% load static %}
@@ -16,6 +15,21 @@
     <a href="{% url 'post-update' post.pk %}">Edit</a>
     <a href="{% url 'post-delete' post.pk %}">Delete</a>
   {% endif %}
+  
+<br/><br/>
+  <h2> Comments ...</h2>
+  {% for comment in post.comments.all %}
+  <strong>{{ comment.author }} said:</strong>
+  <p>{{ comment.content }}</p>
+  <p>Posted on: {{ comment.created_at }}</p>
+  {% if request.user == comment.author %}
+    <a href="{% url 'comment-edit' comment.pk %}">Edit</a>
+    <a href="{% url 'comment-delete' comment.pk %}">Delete</a>
+  {% endif %}
+  <hr>
+{% endfor %}
+<a href="{% url 'comment-create' post.id %}">Add Comment</a>
+
 {% endblock %}
 </body>
 </html>

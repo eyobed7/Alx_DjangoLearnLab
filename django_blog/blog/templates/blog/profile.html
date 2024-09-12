@@ -5,21 +5,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <title>Profile</title>
 </head>
 <body>
-    <h1>Update Profile</h1>
+    <h1 style="color: #4b79a1;">Update Profile</h1>
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <fieldset>
-            <legend>Account Information</legend>
+            <legend style="color: #4b79a1;">Account Information</legend>
             {{ user_form.as_p }}
         </fieldset>
         <fieldset>
-            <legend>Profile Information</legend>
+            <legend style="color: #4b79a1;">Profile Information</legend>
             {{ profile_form.as_p }}
         </fieldset>
-        <button type="submit">Update Profile</button>
+        
+        <button type="submit" style="color: #4b79a1;">Update Profile</button>
         <p><a href="{% url 'logout' %}">Logout</a></p>
         <p><a href="{% url 'postcreate' %}">create post</a></p>
         <p><a href="{% url 'postlist' %}">list post</a></p>

@@ -9,12 +9,18 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-  <h2>Blog Posts</h2>
+  <h2 style="color: #4b79a1;">Blog Posts</h2>
   <ul>
     {% for post in posts %}
       <li>
         <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
         <p>by {{ post.author }} on {{ post.published_date }}</p>
+        {% for comment in Post.objects.all %}
+              <li>
+                  <strong>{{ comment.author }}:</strong> {{ comment.content }}<br>
+                  <small>Posted on: {{ comment.created_at }}</small>
+              </li>
+          {% endfor %}
       </li>
     {% endfor %}
   </ul>

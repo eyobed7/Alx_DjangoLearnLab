@@ -1,45 +1,116 @@
 /* Basic reset */
+/* Resetting margins, paddings, and box-sizing for all elements */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Setting a background gradient and more lively color scheme for the body */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    color: #333;
+    font-family: 'Roboto', sans-serif;
+    background: 0A1828;
+    color: #444;
 }
 
+/* Making the header more dynamic with a colorful background and shadow */
 header {
-    background-color: #333;
-    padding: 10px;
+    background-color: #894ba1; /* Deep blue */
+    background-image: linear-gradient(315deg, #4b79a1 0%, #283e51 74%);
+    padding: 15px;
     text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
+/* Styling the navigation menu with vibrant colors and hover effects */
 header nav ul {
     list-style-type: none;
 }
 
 header nav ul li {
-    display: inline;
+    display: inline-block;
     margin: 0 15px;
 }
 
 header nav ul li a {
-    color: white;
+    color: #ffedb1; /* Light yellow */
     text-decoration: none;
     font-size: 18px;
+    padding: 5px 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+header nav ul li a:hover {
+    background-color: #b2d7f2; /* Warm orange */
+    color: #333;
+    border-radius: 5px;
+}
+
+/* Adding more spacing and a card-like appearance to the content */
 .content {
-    margin: 20px;
+    margin: 30px auto;
+    padding: 20px;
+    max-width: 900px;
+    background-color: #b2d7f2;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
 
+/* Styling the footer with a gradient and more padding */
 footer {
     text-align: center;
     margin-top: 50px;
-    padding: 10px;
-    background-color: #333;
+    padding: 15px;
+    background-color: #4b79a1; /* Deep blue */
+    background-image: linear-gradient(315deg, #4b79a1 0%, #283e51 74%);
     color: white;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+/* Adding subtle animations for links */
+a {
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+a:hover {
+    color: #4c8760; /* Coral */
+}
+
+/* Customizing buttons to be more dynamic */
+button {
+    background-color: #b2d7f2; /* Coral */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #b2d7f2; /* Bright red */
+}
+
+/* Making sure form elements are styled to match */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+    border-color: #ff6f61; /* Coral */
+    outline: none;
+    box-shadow: 0 0 5px rgba(255, 111, 97, 0.5);
 }

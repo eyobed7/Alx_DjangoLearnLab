@@ -1,0 +1,28 @@
+
+
+<!-- comment_form.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>   
+    <meta charset="UTF-8">
+    <title>Blog List</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+  <h2 style="color: #4b79a1;">Blog Posts</h2>
+      <p>No comments yet. Be the first to comment!</p>
+ {% block content%}
+  
+  <h2>Add Comment</h2>
+  <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Save</button>
+  </form>
+{% endblock %}
+
+  </ul>
+</body>
+</html>

@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse,reverse_lazy
 from .forms import CreateUserForm
 from django.contrib.auth import authenticate, login, logout
@@ -10,10 +10,39 @@ from django.contrib.auth.decorators import user_passes_test
 from .forms import CreateUserForm,LoginForm
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from .forms import UserUpdateForm, ProfileUpdateForm
+from .forms import UserUpdateForm, ProfileUpdateForm,CommentForm
 from django.views.generic import DetailView,ListView,CreateView,UpdateView,DeleteView
-from .models import Post
+from .models import Post,Comment
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
+
+class CommentCreateView(CreateView):
+    model = Comment
+    fields = ['content']
+    template_name = 'blog/comment_form.html'
+
+    def form_valid(self, form):
+        post = get_object_or_404(Post, id=self.kwargs['post_id'])
+        form.instance.post = post
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('post-detail', kwargs={'pk': self.kwargs['post_id']})
+
+class CommentUpdateView(UpdateView):
+    model = Comment
+    fields = ['content']
+    template_name = 'blog/comment_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('post-detail', kwargs={'pk': self.object.post.pk})
+
+class CommentDeleteView(DeleteView):
+    model = Comment
+    template_name = 'blog/comment_confirm_delete.html'
+
+    def get_success_url(self):
+        return reverse_lazy('blog/post-detail', kwargs={'pk': self.object.post.pk})
 
 class PostListView(ListView):
     model = Post
@@ -97,6 +126,7 @@ def profile(request):
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.userprofile)
+        comment_form=CommentForm(request.POST, instance=request.user)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
