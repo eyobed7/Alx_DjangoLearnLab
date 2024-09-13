@@ -2,8 +2,10 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django import forms
 from django.forms.widgets import PasswordInput, TextInput
-from .models import Comment
+from .models import Comment,Post
 from .models import UserProfile
+from django import forms
+from taggit.forms import TagWidget
 
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
@@ -17,13 +19,14 @@ class ProfileUpdateForm(forms.ModelForm):
         model = UserProfile
         fields = ['id','bio']
 
-from django import forms
-from .models import Post
 
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content', 'tags']
+        widgets = {
+            'tags': TagWidget(attrs={'class': 'form-control', 'placeholder': 'Add tags'}),
+        }
 
 class CommentForm(forms.ModelForm):
     class Meta:
