@@ -6,9 +6,19 @@
     <meta charset="UTF-8">
     <title>Blog List</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/stylespostlist.css' %}">
 </head>
 <body>
+  <header>
+    <!-- Your site's header content -->
+    <nav>
+        <!-- Your navigation links -->
+        <form method="GET" action="{% url 'post-search' %}" style="display:inline;">
+            <input type="text" name="q" placeholder="Search for posts...">
+            <button type="submit">Search</button>
+        </form>
+    </nav>
+</header>
   <h2 style="color: #4b79a1;">Blog Posts</h2>
   <ul>
     {% for post in posts %}

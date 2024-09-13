@@ -7,13 +7,14 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.models import auth
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.decorators import user_passes_test
-from .forms import CreateUserForm,LoginForm
+from .forms import CreateUserForm,LoginForm,PostForm
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from .forms import UserUpdateForm, ProfileUpdateForm,CommentForm
 from django.views.generic import DetailView,ListView,CreateView,UpdateView,DeleteView
 from .models import Post,Comment
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
+from django.db.models import Q
 
 class CommentCreateView(CreateView):
     model = Comment
@@ -21,13 +22,13 @@ class CommentCreateView(CreateView):
     template_name = 'blog/comment_form.html'
 
     def form_valid(self, form):
-        post = get_object_or_404(Post, id=self.kwargs['post_id'])
+        post = get_object_or_404(Post, id=self.kwargs['pk'])
         form.instance.post = post
         form.instance.author = self.request.user
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('post-detail', kwargs={'pk': self.kwargs['post_id']})
+        return reverse_lazy('post-detail', kwargs={'pk': self.kwargs['pk']})
 
 class CommentUpdateView(UpdateView):
     model = Comment
@@ -49,15 +50,35 @@ class PostListView(ListView):
     template_name = 'blog/postlist.html'  # Template name for listing posts
     context_object_name = 'posts'
 
+def Post_search(request):
+    query = request.GET.get('q')
+    results = []
+    if query:
+        # Search by title, content, or tags
+        results = Post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)  # Assuming you have a tags field related to the Post model
+        ).distinct()
+
+    return render(request, 'blog/post_search.html', {'query': query, 'results': results})
+
+def posts_by_tag(request, tag_name):
+    # Assuming you have a 'tags' field in your Post model or use a many-to-many relationship
+    posts = Post.objects.filter(tags__name=tag_name)  # Adjust the filter based on your model's tag implementation
+    return render(request, 'blog/posts_by_tag.html', {'posts': posts, 'tag_name': tag_name})
 
 class PostCreateView(LoginRequiredMixin,CreateView):
     model = Post
-    fields = ['title', 'content']  # Fields to be included in the form
+    form_class = PostForm
     template_name = 'blog/postcreate.html'
 
     def form_valid(self, form):
         form.instance.author = self.request.user  # Set the author to the current user
         return super().form_valid(form)
+    def get_success_url(self):
+        # Assuming you have a profile view with a URL named 'profile'
+        return reverse('profile')  # Replace 'profile' with your actual URL name
     
 class PostDetailView(DetailView):
     model = Post
