@@ -12,7 +12,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from .forms import UserUpdateForm, ProfileUpdateForm,CommentForm
 from django.views.generic import DetailView,ListView,CreateView,UpdateView,DeleteView
-from .models import Post,Comment
+from .models import Post,Comment,Tag
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.db.models import Q
 
@@ -62,6 +62,26 @@ def Post_search(request):
         ).distinct()
 
     return render(request, 'blog/post_search.html', {'query': query, 'results': results})
+
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'posts_by_tag.html'  # The template to render
+    context_object_name = 'posts'  # The name of the context variable for the list of posts
+    paginate_by = 10  # Optional: add pagination if necessary
+
+    def get_queryset(self):
+        # Get the tag based on the slug passed in the URL
+        tag_slug = self.kwargs.get('tag_slug')
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        
+        # Return posts filtered by the tag
+        return Post.objects.filter(tags=tag)
+
+    def get_context_data(self, **kwargs):
+        # Add additional context if needed (e.g., the current tag)
+        context = super().get_context_data(**kwargs)
+        context['tag'] = get_object_or_404(Tag, slug=self.kwargs.get('tag_slug'))
+        return context
 
 def posts_by_tag(request, tag_name):
     # Assuming you have a 'tags' field in your Post model or use a many-to-many relationship
