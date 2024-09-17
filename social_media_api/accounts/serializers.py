@@ -1,7 +1,9 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework.validators import UniqueValidator
+from rest_framework.authtoken.models import Token
 
+# Get the custom user model
 CustomUser = get_user_model()
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -16,6 +18,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         fields = ['id', 'email', 'username', 'password', 'bio', 'profile_picture']
 
     def create(self, validated_data):
+        # Create the user
         user = CustomUser.objects.create_user(
             email=validated_data['email'],
             username=validated_data['username'],
@@ -23,14 +26,21 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             bio=validated_data.get('bio', ''),
             profile_picture=validated_data.get('profile_picture', None)
         )
+
+        # Create a token for the user
+        Token.objects.create(user=user)
+
         return user
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    email = serializers.EmailField()
     password = serializers.CharField()
 
     def validate(self, data):
-        user = CustomUser.objects.filter(username=data['username']).first()
-        if user and user.check_password(data['password']):
+        email = data.get("email")
+        password = data.get("password")
+        user = CustomUser.objects.filter(email=email).first()
+
+        if user and user.check_password(password):
             return user
         raise serializers.ValidationError("Invalid credentials")
