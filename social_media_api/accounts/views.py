@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth import get_user_model
 from .serializers import UserRegistrationSerializer, LoginSerializer
+from django.contrib.auth import get_user_model
 
 CustomUser = get_user_model()
 
@@ -15,8 +15,8 @@ class RegisterView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
         user = response.data
-        token = Token.objects.get(user_id=user['id'])
-        return Response({'user': user, 'token': token.key})
+        token = Token.objects.create(user_id=user['id'])
+        return Response({'user': user, 'token': token.key}, status=status.HTTP_201_CREATED)
 
 class LoginView(ObtainAuthToken):
     serializer_class = LoginSerializer
@@ -26,7 +26,7 @@ class LoginView(ObtainAuthToken):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key})
+        return Response({'token': token.key}, status=status.HTTP_200_OK)
 
 class ProfileView(generics.RetrieveUpdateAPIView):
     queryset = CustomUser.objects.all()
