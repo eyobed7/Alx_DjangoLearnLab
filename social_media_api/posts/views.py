@@ -8,6 +8,47 @@ from .serializers import PostSerializer
 from .models import Post
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
+# posts/views.py
+
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import Post, Like
+from notifications.models import Notification
+from django.contrib.contenttypes.models import ContentType
+
+@api_view(['POST'])
+def like_post(request, post_id):
+    post = Post.objects.get(id=post_id)
+    user = request.user
+
+    if Like.objects.filter(post=post, user=user).exists():
+        return Response({"detail": "You have already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
+
+    Like.objects.create(post=post, user=user)
+    
+    # Create notification for the post author
+    Notification.objects.create(
+        recipient=post.author,
+        actor=user,
+        verb='liked',
+        target=post
+    )
+
+    return Response({"detail": "Post liked successfully."}, status=status.HTTP_201_CREATED)
+
+@api_view(['POST'])
+def unlike_post(request, post_id):
+    post = Post.objects.get(id=post_id)
+    user = request.user
+
+    like = Like.objects.filter(post=post, user=user).first()
+    if not like:
+        return Response({"detail": "You have not liked this post."}, status=status.HTTP_400_BAD_REQUEST)
+
+    like.delete()
+    return Response({"detail": "Post unliked successfully."}, status=status.HTTP_200_OK)
+
 
 
 class PostViewSet(viewsets.ModelViewSet):
