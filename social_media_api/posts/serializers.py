@@ -1,5 +1,6 @@
 from .models import Post, Comment
 from rest_framework import serializers
+
 class PostSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField()  # Display the username or email of the author
 

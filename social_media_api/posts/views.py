@@ -55,7 +55,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 class UserFeedView(generics.ListAPIView):
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
     def get_queryset(self):
         # Get the list of users the current user is following
