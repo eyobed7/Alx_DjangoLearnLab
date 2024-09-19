@@ -2,10 +2,9 @@ from django.shortcuts import render
 from .serializers import PostSerializer, CommentSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets, permissions
-from .models import Post ,Comment
 from rest_framework.exceptions import PermissionDenied
 from .serializers import PostSerializer
-from .models import Post
+from .models import Post,Like,Comment
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 # posts/views.py
@@ -13,7 +12,6 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Post, Like
 from notifications.models import Notification
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required
@@ -25,17 +23,17 @@ class LikePostView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, pk):
-        # Ensure we retrieve the Post object using generics.get_object_or_404
-        post = get_object_or_404(Post, pk=pk)
+        # Use generics.get_object_or_404(Post, pk=pk) to fetch the post
+        post = generics.get_object_or_404(Post, pk=pk)
         user = request.user
 
-        # Use Like.objects.get_or_create to create or retrieve a Like instance
-        like, created = Like.objects.get_or_create(user=user, post=post)
+        # Use Like.objects.get_or_create(user=request.user, post=post)
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
 
         if not created:
             return Response({"detail": "You have already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Create a notification for the post's author
+        # Create notification for post author
         if post.author != user:
             Notification.objects.create(
                 recipient=post.author,
@@ -52,13 +50,13 @@ class UnlikePostView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, pk):
-        # Use generics.get_object_or_404 to retrieve the Post object
-        post = get_object_or_404(Post, pk=pk)
+        # Use generics.get_object_or_404(Post, pk=pk) to fetch the post
+        post = generics.get_object_or_404(Post, pk=pk)
         user = request.user
 
         # Check if the user has already liked the post, and then delete the like
         try:
-            like = Like.objects.get(user=user, post=post)
+            like = Like.objects.get(user=request.user, post=post)
             like.delete()
             return Response({"detail": "Post unliked successfully."}, status=status.HTTP_200_OK)
         except Like.DoesNotExist:
