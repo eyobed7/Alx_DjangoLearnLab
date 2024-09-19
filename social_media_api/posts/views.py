@@ -25,17 +25,17 @@ class LikePostView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, pk):
-        # Use get_object_or_404 to retrieve the post
+        # Ensure we retrieve the Post object using generics.get_object_or_404
         post = get_object_or_404(Post, pk=pk)
         user = request.user
 
-        # Get or create a Like instance for this user and post
+        # Use Like.objects.get_or_create to create or retrieve a Like instance
         like, created = Like.objects.get_or_create(user=user, post=post)
 
         if not created:
             return Response({"detail": "You have already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Create a notification if the post author is not the current user
+        # Create a notification for the post's author
         if post.author != user:
             Notification.objects.create(
                 recipient=post.author,
@@ -52,18 +52,17 @@ class UnlikePostView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, pk):
-        # Use get_object_or_404 to retrieve the post
+        # Use generics.get_object_or_404 to retrieve the Post object
         post = get_object_or_404(Post, pk=pk)
         user = request.user
 
+        # Check if the user has already liked the post, and then delete the like
         try:
-            # Try to find the like object and delete it
             like = Like.objects.get(user=user, post=post)
             like.delete()
             return Response({"detail": "Post unliked successfully."}, status=status.HTTP_200_OK)
         except Like.DoesNotExist:
             return Response({"detail": "You haven't liked this post."}, status=status.HTTP_400_BAD_REQUEST)
-
 
 class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
