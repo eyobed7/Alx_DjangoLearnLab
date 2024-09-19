@@ -21,43 +21,48 @@ from django.contrib.auth.decorators import login_required
 
 @api_view(['POST'])
 @login_required
-def like_post(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
-    user = request.user
+class LikePostView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
 
-    # Check if the user has already liked the post
-    like, created = Like.objects.get_or_create(user=user, post=post)
-    
-    if not created:
-        return Response({"detail": "You already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, pk):
+        # Use get_object_or_404 to retrieve the post
+        post = get_object_or_404(Post, pk=pk)
+        user = request.user
 
-    # Create a notification for the post author
-    if post.author != user:
-        Notification.objects.create(
-            recipient=post.author,
-            actor=user,
-            verb='liked your post',
-            target=post
-        )
+        # Get or create a Like instance for this user and post
+        like, created = Like.objects.get_or_create(user=user, post=post)
 
-    return Response({"detail": "Post liked."}, status=status.HTTP_200_OK)
+        if not created:
+            return Response({"detail": "You have already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Create a notification if the post author is not the current user
+        if post.author != user:
+            Notification.objects.create(
+                recipient=post.author,
+                actor=user,
+                verb='liked your post',
+                target=post
+            )
 
+        return Response({"detail": "Post liked successfully."}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 @login_required
-def unlike_post(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
-    user = request.user
+class UnlikePostView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
 
-    # Check if the like exists
-    try:
-        like = Like.objects.get(user=user, post=post)
-        like.delete()
-        return Response({"detail": "Post unliked."}, status=status.HTTP_200_OK)
-    except Like.DoesNotExist:
-        return Response({"detail": "You have not liked this post."}, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, pk):
+        # Use get_object_or_404 to retrieve the post
+        post = get_object_or_404(Post, pk=pk)
+        user = request.user
 
+        try:
+            # Try to find the like object and delete it
+            like = Like.objects.get(user=user, post=post)
+            like.delete()
+            return Response({"detail": "Post unliked successfully."}, status=status.HTTP_200_OK)
+        except Like.DoesNotExist:
+            return Response({"detail": "You haven't liked this post."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PostViewSet(viewsets.ModelViewSet):

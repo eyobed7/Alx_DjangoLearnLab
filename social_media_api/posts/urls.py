@@ -13,7 +13,7 @@ router.register(r'comments',CommentViewSet, basename='comment')
 urlpatterns = [
     path('poscom/', include(router.urls)),
     path('feed/', UserFeedView.as_view(), name='user-feed'),
-    path('posts/<int:post_id>/like/', like_post, name='like_post'),
-    path('posts/<int:post_id>/unlike/', unlike_post, name='unlike_post'),
+    path('posts/<int:pk>/like/', like_post, name='like_post'),
+    path('posts/<int:pk>/unlike/', unlike_post, name='unlike_post'),
    
 ]
