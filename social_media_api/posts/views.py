@@ -56,7 +56,7 @@ class UnlikePostView(generics.GenericAPIView):
 
         # Check if the user has already liked the post, and then delete the like
         try:
-            like = Like.objects.get(user=request.user, post=post)
+            like = Like.objects.get(user=user, post=post)
             like.delete()
             return Response({"detail": "Post unliked successfully."}, status=status.HTTP_200_OK)
         except Like.DoesNotExist:
