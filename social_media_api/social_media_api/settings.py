@@ -27,7 +27,9 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['social_media_api.herokuapp.com']
 
+import os
 
+PORT = os.getenv('PORT', 8000)
 # Enable browser XSS filter
 SECURE_BROWSER_XSS_FILTER = True
 
