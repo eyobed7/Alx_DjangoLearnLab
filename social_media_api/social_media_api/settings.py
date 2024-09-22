@@ -28,6 +28,14 @@ DEBUG = False
 ALLOWED_HOSTS = ['social_media_api.herokuapp.com']
 
 
+# Enable browser XSS filter
+SECURE_BROWSER_XSS_FILTER = True
+
+# Prevent clickjacking by denying iframe embedding
+X_FRAME_OPTIONS = 'DENY' # Options: 'DENY', 'SAMEORIGIN', or 'ALLOW-FROM <URL>'
+
+# Redirect all HTTP traffic to HTTPS
+SECURE_SSL_REDIRECT = True
 # Application definition
 
 INSTALLED_APPS = [
